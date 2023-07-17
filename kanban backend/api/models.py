@@ -29,15 +29,6 @@ class Status(models.Model):
         db_table = 'status'
 
 
-class Issuetype(models.Model):
-    issue_type_id = models.IntegerField(primary_key=True)
-    issue_type_name = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'issuetype'
-
-
 class Priority(models.Model):
     priority_id = models.IntegerField(primary_key=True)
     priority_name = models.CharField(max_length=50)
@@ -50,8 +41,6 @@ class Priority(models.Model):
 class Issues(models.Model):
     issue_id = models.IntegerField(primary_key=True)
     user_id_fk = models.ForeignKey(Users, models.DO_NOTHING, db_column='user_id_fk', blank=True, null=True)
-    project_id_fk = models.ForeignKey('Project', models.DO_NOTHING, db_column='project_id_fk', blank=True, null=True)
-    issue_type_id_fk = models.ForeignKey(Issuetype, models.DO_NOTHING, db_column='issue_type_id_fk', blank=True, null=True)
     status_id_fk = models.ForeignKey(Status, models.DO_NOTHING, db_column='status_id_fk', blank=True, null=True)
     assignee = models.ForeignKey(Users, models.DO_NOTHING, related_name='issues_assignee_set', blank=True, null=True)
     reporter = models.ForeignKey(Users, models.DO_NOTHING, related_name='issues_reporter_set', blank=True, null=True)
@@ -61,16 +50,17 @@ class Issues(models.Model):
     acceptance_criteria = models.CharField(max_length=100, blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
+    story_point_id_fk = models.ForeignKey('Storypoints', models.DO_NOTHING, db_column='story_point_id_fk', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'issues'
 
 
-class Project(models.Model):
-    project_id = models.IntegerField(primary_key=True)
-    project_name = models.CharField(max_length=50)
+class Storypoints(models.Model):
+    story_id = models.IntegerField(primary_key=True)
+    story_value = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'project'
+        db_table = 'storypoints'
